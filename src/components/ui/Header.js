@@ -151,7 +151,7 @@ const Header = (props) => {
     { name: 'Services', link: '/services', activeIndex: 1, selectedIndex: 0 },
     {
       name: 'Custom Software Development',
-      link: '/customesoftware',
+      link: '/customsoftware',
       activeIndex: 1,
       selectedIndex: 1
     },

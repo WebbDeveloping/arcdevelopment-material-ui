@@ -2,7 +2,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 
 const arcBlue = '#0B72B9';
 const arcOrange = '#ffba60';
-const arcGrey = '#868686'
+const arcGrey = '#868686';
 
 export default createMuiTheme({
   palette: {
@@ -58,6 +58,11 @@ export default createMuiTheme({
       fontWeight: 300,
       color: 'white'
     },
+    body1: {
+      fontSize: '1.25rem',
+      color: arcGrey,
+      fontWeight: 300
+    },
     learnButton: {
       borderColor: arcBlue,
       color: arcBlue,
@@ -65,7 +70,7 @@ export default createMuiTheme({
       textTransform: 'none',
       borderRadius: 50,
       fontFamily: 'Roboto',
-      fontWeight: 'bold',
+      fontWeight: 'bold'
     }
   }
 });

@@ -104,7 +104,7 @@ const Footer = props => {
                 to='/customsoftware'
                 className={classes.link}
               >
-                Custome Software Development
+                Custom Software Development
               </Grid>
               <Grid
                 onClick={() => {
