@@ -156,7 +156,7 @@ const Header = (props) => {
       selectedIndex: 1
     },
     {
-      name: 'Mobile App Development',
+      name: 'iOS/Android App Development',
       link: '/mobileapps',
       activeIndex: 1,
       selectedIndex: 2
@@ -193,6 +193,8 @@ const Header = (props) => {
             }
           }
           break;
+          case '/estimate':
+          props.setValue(5)
         default:
           break;
       }
@@ -226,6 +228,7 @@ const Header = (props) => {
         className={classes.button}
         component={Link}
         to='/estimate'
+        onClick={()=>props.setValue(5)}
       >
         Free Estimate
       </Button>

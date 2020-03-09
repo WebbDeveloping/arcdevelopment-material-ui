@@ -17,7 +17,7 @@ function App() {
           <Route
             exact
             path='/'
-            component={LandingPage}
+            render={(props)=> <LandingPage {...props}  setValue={setValue} setSelectedIndex={setSelectedIndex}/>}
           />
           
           <Route exact path='/services' component={() => <div>service</div>} />
