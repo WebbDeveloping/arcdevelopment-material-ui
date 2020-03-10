@@ -74,9 +74,48 @@ const Contact = props => {
   const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
 
   const [name, setName] = useState('');
+
   const [email, setEmail] = useState('');
+  const [emailHelper, setEmailHelper] = useState('');
+
   const [phone, setPhone] = useState('');
+  const [phoneHelper, setPhoneHelper] = useState('');
+
   const [message, setMessage] = useState('');
+
+  //   const emailRegex = [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/]
+  //   const phoneRegex= [/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/]
+
+  const onChange = e => {
+    let valid;
+    switch (e.target.id) {
+      case 'email':
+        setEmail(e.target.value);
+        valid = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
+          e.target.value
+        );
+        if (!valid) {
+          setEmailHelper('*Invalid email');
+        } else {
+          setEmailHelper('');
+        }
+        break;
+
+      case 'phone':
+        setPhone(e.target.value);
+        valid = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(
+          e.target.value
+        );
+        if (!valid) {
+          setPhoneHelper('*Invalid Phone Number');
+        } else {
+          setPhoneHelper('');
+        }
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <Grid item container direction='row'>
@@ -89,15 +128,22 @@ const Contact = props => {
         alignItems='center'
         lg={4}
         xl={3}
-        style={{ marginBottom: matchesMD ? '5em' : 0,  marginTop: matchesSM ? '1em' : matchesMD ? '5em' : 0 }}
+        style={{
+          marginBottom: matchesMD ? '5em' : 0,
+          marginTop: matchesSM ? '1em' : matchesMD ? '5em' : 0
+        }}
       >
         <Grid item>
           <Grid item>
-            <Typography align={matchesMD ? 'center' : undefined} variant='h2' style={{ lineHeight: 1 }}>
+            <Typography
+              align={matchesMD ? 'center' : undefined}
+              variant='h2'
+              style={{ lineHeight: 1 }}
+            >
               Contact Us
             </Typography>
             <Typography
-            align={matchesMD ? 'center' : undefined}
+              align={matchesMD ? 'center' : undefined}
               variant='body1'
               style={{ color: theme.palette.common.blue }}
             >
@@ -117,7 +163,7 @@ const Contact = props => {
                 variant='body1'
                 style={{ color: theme.palette.common.blue, fontSize: '1rem' }}
               >
-                (555) 555-5555
+                <a style={{textDecoration: "none", color: 'inherit'}} href='tel:5555555555'>(555) 555-5555</a>
               </Typography>
             </Grid>
           </Grid>
@@ -134,12 +180,12 @@ const Contact = props => {
                 variant='body1'
                 style={{ color: theme.palette.common.blue, fontSize: '1rem' }}
               >
-                JoeDirt@example.com
+                <a style={{textDecoration: "none", color: 'inherit'}} href='mailto:JoeDirt@example.com'>JoeDirt@example.com</a>
               </Typography>
             </Grid>
           </Grid>
           <Grid item container direction='column' style={{ maxWidth: '20em' }}>
-            <Grid item style={{marginBottom: '0.5em'}}>
+            <Grid item style={{ marginBottom: '0.5em' }}>
               <TextField
                 fullWidth
                 label='Name'
@@ -148,22 +194,26 @@ const Contact = props => {
                 onChange={e => setName(e.target.value)}
               />
             </Grid>
-            <Grid item style={{marginBottom: '0.5em'}}>
+            <Grid item style={{ marginBottom: '0.5em' }}>
               <TextField
                 fullWidth
                 label='Email'
+                error={emailHelper.length !== 0}
+                helperText={emailHelper}
                 id='email'
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={onChange}
               />
             </Grid>
-            <Grid item style={{marginBottom: '0.5em'}}>
+            <Grid item style={{ marginBottom: '0.5em' }}>
               <TextField
+                error={phoneHelper.length !== 0}
+                helperText={phoneHelper}
                 fullWidth
                 label='Phone'
                 id='phone'
                 value={phone}
-                onChange={e => setPhone(e.target.value)}
+                onChange={onChange}
               />
             </Grid>
           </Grid>
@@ -181,7 +231,16 @@ const Contact = props => {
             />
           </Grid>
           <Grid item container justify='center' style={{ marginTop: '2em' }}>
-            <Button variant='contained' className={classes.sendButton}>
+            <Button
+              disabled={
+                name.length === 0 ||
+                message.length === 0 ||
+                phoneHelper.length !== 0 ||
+                emailHelper.length !== 0
+              }
+              variant='contained'
+              className={classes.sendButton}
+            >
               Send Message
               <img
                 src={airplane}
