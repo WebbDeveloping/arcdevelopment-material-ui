@@ -5,6 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import background from '../assets/background.jpg';
@@ -62,6 +64,10 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.common.orange,
     '&:hover': {
       backgroundColor: theme.palette.secondary.light
+    },
+    [theme.breakpoints.down('sm')]: {
+      height: 40,
+      width: 225
     }
   }
 }));
@@ -82,6 +88,8 @@ const Contact = props => {
   const [phoneHelper, setPhoneHelper] = useState('');
 
   const [message, setMessage] = useState('');
+
+  const [open, setOpen] = useState(false);
 
   //   const emailRegex = [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/]
   //   const phoneRegex= [/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/]
@@ -163,7 +171,12 @@ const Contact = props => {
                 variant='body1'
                 style={{ color: theme.palette.common.blue, fontSize: '1rem' }}
               >
-                <a style={{textDecoration: "none", color: 'inherit'}} href='tel:5555555555'>(555) 555-5555</a>
+                <a
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                  href='tel:5555555555'
+                >
+                  (555) 555-5555
+                </a>
               </Typography>
             </Grid>
           </Grid>
@@ -180,7 +193,12 @@ const Contact = props => {
                 variant='body1'
                 style={{ color: theme.palette.common.blue, fontSize: '1rem' }}
               >
-                <a style={{textDecoration: "none", color: 'inherit'}} href='mailto:JoeDirt@example.com'>JoeDirt@example.com</a>
+                <a
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                  href='mailto:JoeDirt@example.com'
+                >
+                  JoeDirt@example.com
+                </a>
               </Typography>
             </Grid>
           </Grid>
@@ -240,6 +258,7 @@ const Contact = props => {
               }
               variant='contained'
               className={classes.sendButton}
+              onClick={() => setOpen(true)}
             >
               Send Message
               <img
@@ -251,6 +270,125 @@ const Contact = props => {
           </Grid>
         </Grid>
       </Grid>
+      {/* -----Dialog Popup----- */}
+      <Dialog
+        style={{ zIndex: 1302 }}
+        open={open}
+        fullScreen={matchesXS}
+        onClose={() => setOpen(false)}
+        PaperProps={{
+          style: {
+            paddingTop: matchesXS ? '1em' : '5em',
+            paddingBottom: matchesXS ? '1em' : '5em',
+            paddingLeft: matchesXS
+              ? 0
+              : matchesSM
+              ? '5em'
+              : matchesMD
+              ? '10em'
+              : '20em',
+            paddingRight: matchesXS
+              ? 0
+              : matchesSM
+              ? '5em'
+              : matchesMD
+              ? '10em'
+              : '20em'
+          }
+        }}
+      >
+        <DialogContent>
+          <Grid container direction='column'>
+            <Grid item>
+              <Typography align='center' variant='h4' gutterBottom>
+                Confirm Message
+              </Typography>
+            </Grid>
+
+            <Grid item style={{ marginBottom: '0.5em' }}>
+              <TextField
+                fullWidth
+                label='Name'
+                id='name'
+                value={name}
+                onChange={e => setName(e.target.value)}
+              />
+            </Grid>
+            <Grid item style={{ marginBottom: '0.5em' }}>
+              <TextField
+                fullWidth
+                label='Email'
+                error={emailHelper.length !== 0}
+                helperText={emailHelper}
+                id='email'
+                value={email}
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid item style={{ marginBottom: '0.5em' }}>
+              <TextField
+                error={phoneHelper.length !== 0}
+                helperText={phoneHelper}
+                fullWidth
+                label='Phone'
+                id='phone'
+                value={phone}
+                onChange={onChange}
+              />
+            </Grid>
+          </Grid>
+          <Grid item>
+            <TextField
+              fullWidth
+              value={message}
+              id='message'
+              onChange={e => setMessage(e.target.value)}
+              multiline
+              rows={10}
+              className={classes.message}
+              InputProps={{ disableUnderline: true }}
+              style={{ maxWidth: matchesXS ? '100%' : '20em' }}
+            />
+          </Grid>
+          <Grid
+            item
+            container
+            style={{ marginTop: '2em' }}
+            alignItems='center'
+            direction={matchesSM ? 'column' : 'row'}
+          >
+            <Grid item>
+              <Button
+                onClick={() => setOpen(false)}
+                style={{ fontWeight: 300 }}
+                color='primary'
+              >
+                Cancel
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                disabled={
+                  name.length === 0 ||
+                  message.length === 0 ||
+                  phoneHelper.length !== 0 ||
+                  emailHelper.length !== 0
+                }
+                variant='contained'
+                className={classes.sendButton}
+                onClick={() => setOpen(true)}
+              >
+                Send Message
+                <img
+                  src={airplane}
+                  alt='paper airplane'
+                  style={{ marginLeft: '1em' }}
+                />
+              </Button>
+            </Grid>
+          </Grid>
+        </DialogContent>
+      </Dialog>
       {/* -----call to action----- */}
       <Grid
         item
