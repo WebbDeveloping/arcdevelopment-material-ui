@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -7,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import background from '../assets/background.jpg';
@@ -91,6 +93,8 @@ const Contact = props => {
 
   const [open, setOpen] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   //   const emailRegex = [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/]
   //   const phoneRegex= [/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/]
 
@@ -125,6 +129,32 @@ const Contact = props => {
     }
   };
 
+  const onConfirm = () => {
+    setLoading(true);
+    axios
+      .get(
+        'https://us-central1-material-ui-course-7e0b5.cloudfunctions.net/sendMail'
+      )
+      .then(res => {
+        setLoading(false);
+        setOpen(false);
+        setName('');
+        setEmail('');
+        setPhone('');
+        setMessage('');
+      })
+      .catch(err => {
+        setLoading(false);
+      });
+  };
+
+  const buttonContents = (
+    <React.Fragment>
+      Send Message
+      <img src={airplane} alt='paper airplane' style={{ marginLeft: '1em' }} />
+    </React.Fragment>
+  );
+
   return (
     <Grid item container direction='row'>
       {/* ----form---- */}
@@ -148,6 +178,7 @@ const Contact = props => {
               variant='h2'
               style={{ lineHeight: 1 }}
             >
+            
               Contact Us
             </Typography>
             <Typography
@@ -259,14 +290,7 @@ const Contact = props => {
               variant='contained'
               className={classes.sendButton}
               onClick={() => setOpen(true)}
-            >
-              Send Message
-              <img
-                src={airplane}
-                alt='paper airplane'
-                style={{ marginLeft: '1em' }}
-              />
-            </Button>
+            >{loading ? <CircularProgress size={30} /> : buttonContents}</Button>
           </Grid>
         </Grid>
       </Grid>
@@ -376,14 +400,9 @@ const Contact = props => {
                 }
                 variant='contained'
                 className={classes.sendButton}
-                onClick={() => setOpen(true)}
+                onClick={onConfirm}
               >
-                Send Message
-                <img
-                  src={airplane}
-                  alt='paper airplane'
-                  style={{ marginLeft: '1em' }}
-                />
+               {buttonContents}
               </Button>
             </Grid>
           </Grid>
